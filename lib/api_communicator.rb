@@ -2,9 +2,9 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
-def get_character_movies_from_api(character)
+def get_character_movies_from_api(character, url = 'http://www.swapi.co/api/people/')
   #make the web request
-  all_characters = RestClient.get('http://www.swapi.co/api/people/')
+  all_characters = RestClient.get(url)
   character_hash = JSON.parse(all_characters)
 
   # iterate over the character hash to find the collection of `films` for the given
@@ -23,9 +23,19 @@ def parse_character_movies(films_hash)
 end
 
 def show_character_movies(character)
-  films_hash = get_character_movies_from_api(character)
-  # parse_character_movies(films_hash)
-  get_character(films_hash["results"], character)
+  next_url = "http://www.swapi.co/api/people/"
+
+  while next_url != nil
+    films_hash = get_character_movies_from_api(character, next_url)
+    next_url = films_hash["next"]
+
+    character_result = get_character(films_hash["results"], character)
+    if character_result
+      return character_result
+    end
+  end
+
+  "Character not found"
 end
 
 def get_character(movies, search_term)
@@ -33,7 +43,6 @@ def get_character(movies, search_term)
     character["name"].start_with?(search_term)
   end
 end
-
 ## BONUS
 
 # that `get_character_movies_from_api` method is probably pretty long. Does it do more than one job?
