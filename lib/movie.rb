@@ -11,7 +11,7 @@ end
 
 def parse_character_movies(films_hash)
   films_hash.collect.with_index do |film, index|
-    puts "#{index + 1}. #{film["title"]} (Episode #{film["episode_id"]})"
+    puts "- #{film["title"]} (Episode #{film["episode_id"]})"
   end
 end
 
@@ -23,4 +23,21 @@ def show_character_movies(character)
   end
 
   puts "Character not found"
+end
+
+def find_movie_by_episode_id(movies, episode_id)
+  movies.find do |movie|
+    movie["episode_id"] == episode_id
+  end
+end
+
+def show_movie(episode_id)
+  urls = []
+  7.times do |number|
+    urls << "http://swapi.co/api/films/#{number + 1}/"
+  end
+
+  films_result = get_movies_from_api(urls)
+  movie = find_movie_by_episode_id(films_result, episode_id)
+  parse_character_movies([movie])
 end

@@ -9,8 +9,13 @@ def get_command_from_user
 end
 
 def get_character_from_user
-  puts "please enter a character:"
+  puts "Please enter a character:"
   input = gets.chomp
+end
+
+def get_movie_episode_from_user
+  puts "Please enter an episode number (1-7)"
+  input = gets.chomp.to_i
 end
 
 def execute_command(command)
@@ -20,6 +25,11 @@ def execute_command(command)
   when "character"
     character = get_character_from_user
     show_character_movies(character)
+  when "movie"
+    episode_id = get_movie_episode_from_user
+    show_movie(episode_id)
+  when "exit"
+    exit
   else
     get_command_from_user
   end
