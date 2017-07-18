@@ -27,11 +27,13 @@ def execute_command(command)
     show_character_movies(character)
   when "movie"
     episode_id = get_movie_episode_from_user
-    show_movie(episode_id)
+    if episode?(episode_id)
+      show_movie(episode_id)
+    else
+      puts "Episode doesn't exist."
+    end
   when "exit"
     exit
-  else
-    get_command_from_user
   end
 end
 

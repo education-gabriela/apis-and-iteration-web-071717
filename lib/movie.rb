@@ -9,7 +9,11 @@ def get_movies_from_api(movies_urls)
   movies
 end
 
-def parse_character_movies(films_hash)
+def parse_movies(films_hash)
+  if films_hash.class == Hash
+    films_hash = [films_hash]
+  end
+
   films_hash.collect.with_index do |film, index|
     puts "- #{film["title"]} (Episode #{film["episode_id"]})"
   end
@@ -19,7 +23,7 @@ def show_character_movies(character)
   character_result = get_character_movies_from_api(character)
 
   if character_result != nil
-    return parse_character_movies(character_result)
+    return parse_movies(character_result)
   end
 
   puts "Character not found"
@@ -31,6 +35,13 @@ def find_movie_by_episode_id(movies, episode_id)
   end
 end
 
+def episode?(episode_id)
+  if episode_id < 1 || episode_id > 7
+    return false
+  end
+  true
+end
+
 def show_movie(episode_id)
   urls = []
   7.times do |number|
@@ -39,5 +50,5 @@ def show_movie(episode_id)
 
   films_result = get_movies_from_api(urls)
   movie = find_movie_by_episode_id(films_result, episode_id)
-  parse_character_movies([movie])
+  parse_movies(movie)
 end
