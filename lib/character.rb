@@ -2,6 +2,7 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
+# Gets movies recursively through the next_url method
 def get_character_movies_from_api(character)
   next_url = "http://www.swapi.co/api/people/"
 
@@ -18,8 +19,9 @@ def get_character_movies_from_api(character)
   nil
 end
 
-def get_character(movies, search_term)
-  movies.find do |character|
+# Goes trough a array of character hashes and find matching name
+def get_character(characters_group, search_term)
+  characters_group.find do |character|
     character["name"].start_with?(search_term)
   end
 end
